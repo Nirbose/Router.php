@@ -12,7 +12,7 @@ class Router {
         $this->url = trim($_SERVER['REQUEST_URI'], '/');
     }
 
-    private static function new(): self
+    private static function new(): Router
     {
         return new static();
     }
@@ -21,14 +21,15 @@ class Router {
         self::new()->match('GET', $path, $action);
     }
 
-    public function match($method, $path, $action) {
+    public function match(string $method, $path, $action) {
         $this->routes[$method][] = new Route($path, $action);
+        $this->run();
     }
 
     public function run() {
         foreach($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
             if ($route->matche($this->url)) {
-                $route->execute();
+                echo $route->execute();
             }
         }
 
