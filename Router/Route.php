@@ -24,7 +24,6 @@ class Route {
                     array_push($this->matche, $value[0]);
                 }
             }
-            var_dump($this->matche);
             return true;
         } else {
             return false;
@@ -32,6 +31,10 @@ class Route {
     }
 
     public function execute() {
+        if (is_callable($this->action)) {
+            return call_user_func_array($this->action, $this->matche);
+        }
+
         $params = explode('@', $this->action);
         $controller = new $params[0]();
         $method = $params[1];
