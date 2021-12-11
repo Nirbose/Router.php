@@ -35,11 +35,21 @@ class Route {
             return call_user_func_array($this->action, $this->matche);
         }
 
-        $params = explode('@', $this->action);
-        $controller = new $params[0]();
-        $method = $params[1];
+        if (is_string($this->action)) {
+            $params = explode('@', $this->action);
+            $controller = new $params[0]();
+            $method = $params[1];
 
-        return call_user_func_array([$controller, $method], $this->matche);
-        // isset($this->matche[1]) ? $controller->$method($this->matche[1]) : $controller->$method();
+            return call_user_func_array([$controller, $method], $this->matche);
+        }
+
+        if (is_array($this->action)) {
+            $controller = new $this->action[0]();
+            $method = $this->action[1];
+
+            return call_user_func_array([$controller, $method], $this->matche);
+        }
+
+        throw new \Exception("L'action n'est pas valide");
     }
 }
