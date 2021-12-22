@@ -1,6 +1,5 @@
 <?php
 
-use Router\Router;
 use Router\Routes;
 
 include '../vendor/autoload.php';

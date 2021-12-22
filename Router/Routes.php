@@ -7,9 +7,9 @@ class Routes {
     /**
      * Router
      *
-     * @var Router
+     * @var Router|null
      */
-    protected static Router $router;
+    protected static $router = null;
 
     /**
      * Initialize the router
