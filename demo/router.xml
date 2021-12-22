@@ -1,0 +1,5 @@
+<?xml version='1.0' standalone='yes'?>
+<router>
+  <route method='get' path='index2.php' callable='Foo@bar'></route>
+  <route path='index2.php/{page}' callable='Foo@baz'></route>
+</router>

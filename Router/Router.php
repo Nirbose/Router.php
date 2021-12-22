@@ -142,7 +142,8 @@ class Router {
      *
      * @return void
      */
-    public function run() {
+    public function run()
+    {
         foreach($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
             if ($route->matche($this->url)) {
                 echo $route->execute();
@@ -150,6 +151,6 @@ class Router {
             }
         }
 
-        return header("HTTP/1.0 404 Not Found");
+        // return header("HTTP/1.0 404 Not Found");
     }
 }
