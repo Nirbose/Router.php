@@ -1,8 +1,16 @@
 {
+    "name": "Nirbose/Router.php",
+    "description": "Petit Router perso",
+    "keywords": ["router", "routing", "routes"],
+    "homepage": "https://github.com/Nirbose/Router.php",
+    "type": "library",
     "autoload": {
         "psr-4": {
             "Router\\": "Router/"
         }
+    },
+    "require": {
+        "php": ">=7.4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
