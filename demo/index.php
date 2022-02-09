@@ -1,14 +1,14 @@
 <?php
 
-use Router\Routes;
+use Router\Route;
 
 include '../vendor/autoload.php';
 include './HomeController.php';
 
-Routes::get('/', function () {
-    return "Bien le bonjour";
+Route::get('/', function () {
+    echo "Yo !";
 });
-Routes::get('/about', 'HomeController@about');
-Routes::get('/contact', 'HomeController@contact');
 
-Routes::run();
+Route::get('/about', 'HomeController@about');
+
+Route::get('/contact', 'HomeController@contact');
