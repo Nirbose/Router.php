@@ -6,6 +6,7 @@ class Route {
 
     public static $url;
     private static $routes = [];
+    private static $names = [];
 
     /**
      * Get routes
@@ -15,6 +16,21 @@ class Route {
     public function getRoutes(): array
     {
         return $this->routes;
+    }
+
+    /**
+     * Redirect to route
+     *
+     * @param string $name
+     * 
+     * @return void
+     */
+    public static function redirect(string $name): void
+    {
+        if (isset(self::$names[$name])) {
+            $url = self::$names[$name]->path;
+            header("Location: /" . $url);
+        }
     }
 
     /**
@@ -107,7 +123,6 @@ class Route {
     public static function match(string $method, string $path, $action): self
     {
         self::$routes[$method][] = new Router($path, $action);
-        self::run();
         return new static();
     }
 
@@ -126,11 +141,24 @@ class Route {
         foreach(self::$routes[$_SERVER['REQUEST_METHOD']] as $route) {
             if ($route->matche(self::$url)) {
                 echo $route->execute();
-                self::$routes[$_SERVER['REQUEST_METHOD']] = [];
                 return;
             }
         }
 
         // return header("HTTP/1.0 404 Not Found");
     }
+
+    /**
+     * Route Name
+     *
+     * @param string $name
+     * 
+     * @return self
+     */
+    public function name(string $name): self
+    {
+        $this::$names[$name] = end($this::$routes[$_SERVER['REQUEST_METHOD']]);
+        return $this;
+    }
+
 }
