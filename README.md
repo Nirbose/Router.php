@@ -10,31 +10,11 @@ Les fonctions disponibles sont :
  - delete
  - options
 
-
+Exemple :
 ```php
-Routes::get('/blog', function () {
- return "Mon super Blog !";
+Route::get('about', function () {
+  return "<h1>About Page !</h1>";
 });
- 
-Routes::get('/blog/{id}', function ($id) {
- return "Blog " . $id;
-});
-
-Routes::run();
-```
-ou
-```php
-$router = new Router();
-
-$router->get('/blog', function () {
- return "Mon super Blog !";
-});
-
-$router->get('/blog/{id}', function ($id) {
- return "Blog " . $id;
-});
-
-$router->run();
 ```
 
 ## License
