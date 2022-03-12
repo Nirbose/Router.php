@@ -1,16 +1,20 @@
 <?php
 
-use Router\Route;
+include_once '../vendor/autoload.php';
 
-include '../vendor/autoload.php';
-include './HomeController.php';
+use Router\RouteCollector;
+use Router\Router;
 
-Route::get('/', function () {
-    Route::redirect('about');
+Router::get('/', function () {
+    echo 'Hello world!';
 });
 
-Route::get('/about', 'HomeController@about')->name('about');
+Router::group('/post', function (RouteCollector $route) {
+    $route->get('/', function () {
+        echo 'All Post!';
+    });
 
-Route::get('/contact', 'HomeController@contact')->name("contact");
-
-Route::run();
+    $route->get('/{id}', function ($id) {
+        echo 'Post number ' . $id;
+    });
+});
