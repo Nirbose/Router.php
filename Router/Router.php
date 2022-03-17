@@ -152,8 +152,18 @@ class Router implements RouterInterface {
                     $callback = explode('@', $callback);
                 }
 
-                $controller = new $callback[0];
-                return $controller->{$callback[1]}($matches);
+                if (!class_exists($callback[0])) {
+                    throw new \Exception("Class {$callback[0]} not found");
+                }
+
+                $class = new $callback[0];
+
+                if (!method_exists($class, $callback[1])) {
+                    throw new \Exception("Method $callback[1] not found in class $callback[0]");
+                }
+
+                echo $class->{$callback[1]}($matches);
+                return;
             }
 
             // 404 page
