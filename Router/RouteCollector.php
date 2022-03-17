@@ -2,13 +2,14 @@
 
 namespace Router;
 
-class RouteCollector {
+class RouteCollector implements RouterInterface{
 
-    private string $base;
+    private static string $base;
 
-    public function __construct(string $base)
+    public static function new(string $base)
     {
-        $this->base = trim($base, '/') . '/';
+        self::$base = trim($base, '/') . '/';
+        return new self();
     }
 
     /**
@@ -18,9 +19,9 @@ class RouteCollector {
      * @param string|array|callback $callback
      * @return Route
      */
-    public function get(string $route, $callback): Route
+    public static function get(string $route, $callback): Route
     {
-        return Router::get($this->base . trim($route, '/'), $callback);
+        return Router::get(self::$base . trim($route, '/'), $callback);
     }
 
     /**
@@ -30,9 +31,9 @@ class RouteCollector {
      * @param string|array|callback $callback
      * @return Route
      */
-    public function post(string $route, $callback): Route
+    public static function post(string $route, $callback): Route
     {
-        return Router::post('POST', $this->base . $route, $callback);
+        return Router::post(self::$base . $route, $callback);
     }
 
     /**
@@ -42,9 +43,9 @@ class RouteCollector {
      * @param string|array|callback $callback
      * @return Route
      */
-    public function put(string $route, $callback): Route
+    public static function put(string $route, $callback): Route
     {
-        return Router::put('PUT', $this->base . $route, $callback);
+        return Router::put(self::$base . $route, $callback);
     }
 
     /**
@@ -54,9 +55,9 @@ class RouteCollector {
      * @param string|array|callback $callback
      * @return Route
      */
-    public function patch(string $route, $callback): Route
+    public static function patch(string $route, $callback): Route
     {
-        return Router::patch('PATCH', $this->base . $route, $callback);
+        return Router::patch(self::$base . $route, $callback);
     }
 
     /**
@@ -66,9 +67,33 @@ class RouteCollector {
      * @param string|array|callback $callback
      * @return Route
      */
-    public function delete(string $route, $callback): Route
+    public static function delete(string $route, $callback): Route
     {
-        return Router::delete('DELETE', $this->base . $route, $callback);
+        return Router::delete(self::$base . $route, $callback);
+    }
+
+    /**
+     * add options route to collector
+     * 
+     * @param string $route
+     * @param string|array|callback $callback
+     * @return Route
+     */
+    public static function options(string $route, $callback): Route
+    {
+        return Router::options(self::$base . $route, $callback);
+    }
+
+    /**
+     * add head route to collector
+     * 
+     * @param string $route
+     * @param string|array|callback $callback
+     * @return Route
+     */
+    public static function head(string $route, $callback): Route
+    {
+        return Router::head(self::$base . $route, $callback);
     }
 
 }

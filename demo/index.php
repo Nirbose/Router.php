@@ -4,17 +4,14 @@ include_once '../vendor/autoload.php';
 
 use Router\RouteCollector;
 use Router\Router;
+use Router\RouterInterface;
 
 Router::get('/', function () {
     echo 'Hello world!';
 });
 
-Router::group('/post', function (RouteCollector $route) {
-    $route->get('/', function () {
-        echo 'All Post!';
-    });
-
-    $route->get('/{id}', function ($id) {
-        echo 'Post number ' . $id;
+Router::group('/post', function (RouterInterface $route) {
+    $route::get('/e', function () {
+        echo 'Hello worldeeee!';
     });
 });

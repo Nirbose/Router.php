@@ -2,7 +2,7 @@
 
 namespace Router;
 
-class Router {
+class Router implements RouterInterface {
 
     const METHODS_ALL = ['get', 'post', 'put', 'patch', 'delete'];
 
@@ -15,7 +15,7 @@ class Router {
      */
     public static function group(string $base, callable $callback)
     {
-        $routes = new RouteCollector($base);
+        $routes = RouteCollector::new($base);
         $callback($routes);
     }
 
@@ -85,6 +85,32 @@ class Router {
     }
 
     /**
+     * add options route to router
+     *
+     * @param string $route
+     * @param string|array|callback $callback
+     * @return Route
+     */
+    public static function options(string $route, $callback): Route
+    {
+        self::match('OPTIONS', $route, $callback);
+        return new Route($route);
+    }
+
+    /**
+     * add head route to router
+     *
+     * @param string $route
+     * @param string|array|callback $callback
+     * @return Route
+     */
+    public static function head(string $route, $callback): Route
+    {
+        self::match('HEAD', $route, $callback);
+        return new Route($route);
+    }
+
+    /**
      * match method
      *
      * @param string|array $method
@@ -109,6 +135,9 @@ class Router {
             $pathToMatch = "#^$path$#";
 
             if (preg_match_all($pathToMatch, trim($_SERVER['REQUEST_URI'], '/'), $matche)) {
+
+                http_response_code(200);
+                
                 foreach($matche as $key => $value) {
                     if ($key != 0) {
                         array_push($matches, $value[0]);
