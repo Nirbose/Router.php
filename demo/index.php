@@ -20,6 +20,6 @@ Router::group('/post', function () {
     });
 
     Router::get('/{id}', function ($id) {
-        echo 'Me !';
+        echo '<a href="test/t">yo</a> !';
     });
 });

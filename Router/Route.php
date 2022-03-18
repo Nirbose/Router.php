@@ -19,6 +19,13 @@ class Route {
         return $this;
     }
 
+    public function previous(): void
+    {
+        $previous = $_SERVER['HTTP_REFERER'] ?? '/';
+        header("Location: $previous", true, 302);
+        return;
+    }
+
     public static function getRoutes(): array
     {
         return self::$routes;
