@@ -7,6 +7,13 @@ class Router implements RouterInterface {
     const METHODS_ALL = ['get', 'post', 'put', 'patch', 'delete'];
 
     /**
+     * base group route
+     *
+     * @var null|string
+     */
+    private static $baseUrl = null;
+
+    /**
      * Create group routes for all methods
      * 
      * @param string $route
@@ -15,8 +22,9 @@ class Router implements RouterInterface {
      */
     public static function group(string $base, callable $callback)
     {
-        $routes = RouteCollector::new($base);
-        $callback($routes);
+        self::$baseUrl = trim($base, '/');
+        $callback();
+        self::$baseUrl = null;
     }
 
     /**
@@ -120,6 +128,10 @@ class Router implements RouterInterface {
      */
     public static function match($method, string $route, $callback)
     {
+        if (!is_null(self::$baseUrl)) {
+            $route = self::$baseUrl . $route;
+        }
+
         $route = trim($route, '/');
         $matches = [];
 
@@ -140,7 +152,7 @@ class Router implements RouterInterface {
                 
                 foreach($matche as $key => $value) {
                     if ($key != 0) {
-                        array_push($matches, $value[0]);
+                        array_push($matches, htmlspecialchars($value[0]));
                     }
                 }
 

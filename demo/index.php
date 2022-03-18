@@ -10,10 +10,16 @@ Router::get('/', function () {
     echo 'Hello world!';
 });
 
-Router::group('/post', function (RouterInterface $route) {
-    $route::get('/e', function () {
+Router::group('/post', function () {
+    Router::get('/', function () {
         echo 'Hello worldeeee!';
     });
 
-    $route::get('/f', [HomeController::class, 'about']);
+    Router::get('/test/t', function () {
+        echo 'Hello';
+    });
+
+    Router::get('/{id}', function ($id) {
+        echo 'Me !';
+    });
 });
