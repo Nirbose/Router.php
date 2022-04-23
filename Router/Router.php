@@ -4,6 +4,8 @@ namespace Router;
 
 class Router implements RouterInterface {
 
+    private static bool $find = false;
+
     const METHODS_ALL = ['get', 'post', 'put', 'patch', 'delete'];
 
     /**
@@ -133,7 +135,6 @@ class Router implements RouterInterface {
         }
 
         $route = trim($route, '/');
-        $matches = [];
 
         if (is_array($method)) {
             foreach ($method as $m) {
@@ -143,44 +144,67 @@ class Router implements RouterInterface {
         }
 
         if ($_SERVER['REQUEST_METHOD'] === strtoupper($method)) {
-            $path = preg_replace('#{([\w])+}#', '([^/]+)', $route);
-            $pathToMatch = "#^$path$#";
-
-            if (preg_match_all($pathToMatch, trim($_SERVER['REQUEST_URI'], '/'), $matche)) {
-
-                http_response_code(200);
-                
-                foreach($matche as $key => $value) {
-                    if ($key != 0) {
-                        array_push($matches, htmlspecialchars($value[0]));
-                    }
-                }
-
-                if (is_callable($callback)) {
-                    return call_user_func_array($callback, $matches);
-                }
-
-                if (is_string($callback)) {
-                    $callback = explode('@', $callback);
-                }
-
-                if (!class_exists($callback[0])) {
-                    throw new \Exception("Class {$callback[0]} not found");
-                }
-
-                $class = new $callback[0];
-
-                if (!method_exists($class, $callback[1])) {
-                    throw new \Exception("Method $callback[1] not found in class $callback[0]");
-                }
-
-                echo $class->{$callback[1]}($matches);
+            
+            if (trim($_SERVER['REQUEST_URI'], '/') == $route) {
+                self::$find = true;
+                header('HTTP/1.1 200 OK', true, 200);
+                self::execute($callback);
                 return;
             }
 
-            // 404 page
-            header('HTTP/1.0 404 Not Found', true, 404);
+            $path = preg_replace('#{([\w])+}#', '([^/]+)', $route);
+            $pathToMatch = "#^$path$#";
+
+            if (preg_match_all($pathToMatch, trim($_SERVER['REQUEST_URI'], '/'), $matche) && !self::$find) {
+                self::$find = true;
+                header('HTTP/1.1 200 OK', true, 200);
+                self::execute($callback, $matche);
+                return;
+            }
+
+            if (!self::$find) {
+                // 404 page
+                header('HTTP/1.0 404 Not Found', true, 404);
+            }
         }
+    }
+
+    /**
+     * Execute callback to route
+     * 
+     * @param string|array|callback $callback
+     * @param array $matche
+     * @return void
+     */
+    private static function execute($callback, ?array $matche = [])
+    {
+        $matches = [];
+
+        foreach($matche as $key => $value) {
+            if ($key != 0) {
+                array_push($matches, htmlspecialchars($value[0]));
+            }
+        }
+
+        if (is_callable($callback)) {
+            return call_user_func_array($callback, $matches);
+        }
+
+        if (is_string($callback)) {
+            $callback = explode('@', $callback);
+        }
+
+        if (!class_exists($callback[0])) {
+            throw new \Exception("Class {$callback[0]} not found");
+        }
+
+        $class = new $callback[0];
+
+        if (!method_exists($class, $callback[1])) {
+            throw new \Exception("Method $callback[1] not found in class $callback[0]");
+        }
+
+        echo $class->{$callback[1]}($matches);
     }
 
 }

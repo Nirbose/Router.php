@@ -15,7 +15,7 @@ Router::group('/post', function () {
         echo 'Hello worldeeee!';
     });
 
-    Router::get('/test/t', function () {
+    Router::get('/test', function () {
         echo 'Hello';
     });
 
