@@ -204,7 +204,7 @@ class Router implements RouterInterface {
             throw new \Exception("Method $callback[1] not found in class $callback[0]");
         }
 
-        echo $class->{$callback[1]}($matches);
+        return call_user_func_array([$class, $callback[1]], $matches);
     }
 
 }
