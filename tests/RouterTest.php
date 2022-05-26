@@ -1,26 +1,21 @@
 <?php
 
-use GuzzleHttp\Client;
+use Nirbose\Router\Router;
+use Nirbose\Router\Uri;
 use PHPUnit\Framework\TestCase;
-use Router\Routes;
 
 class RouterTest extends TestCase {
 
-    public function testRouteHome() {
+    public function testHomeRoute() {
 
-        // test
-        $request = new Client();
-        $response = $request->get('http://localhost:5500/about');
+        Uri::setPath('/home');
+
+        $response = Router::get('/home', [
+            'controller' => HomeController::class,
+            'action' => 'index'
+        ])->getRoute();
 
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testNoExistRoute() {
-
-        // test
-        $request = new Client();
-        $response = $request->get('http://localhost:5500/no-exist');
-
-        $this->assertEquals('404 Not Found', $response->getStatusCode());
-    }
 }
