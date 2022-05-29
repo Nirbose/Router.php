@@ -14,7 +14,7 @@ class UriTest extends TestCase {
 
     public function testUriWithParams() {
         Uri::setMethod('GET');
-        Uri::setPath('/home/{id}');
+        Uri::setPath('/home/1');
 
         $this->assertTrue(Uri::is('GET', '/home/1'));
     }

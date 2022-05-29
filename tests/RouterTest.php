@@ -10,12 +10,24 @@ class RouterTest extends TestCase {
 
         Uri::setPath('/home');
 
-        $response = Router::get('/home', [
-            'controller' => HomeController::class,
-            'action' => 'index'
-        ])->getRoute();
+        $response = Router::get('/home', function () { })->getRoute();
 
         $this->assertEquals(200, $response->getStatusCode());
     }
 
+    /**
+     * Test route with params
+     */
+    public function testHomeRouteWithParams() {
+
+        Uri::setPath('/home/1');
+        Uri::setParams(['id' => 1]);
+
+        $response = Router::get('/home/{id}', function (int $id) {
+            $this->assertEquals(1, $id);
+        })->getRoute();
+
+        $this->assertEquals(200, $response->getStatusCode());
+    
+    }
 }

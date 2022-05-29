@@ -2,6 +2,7 @@
 
 namespace Nirbose\Router;
 
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
 class Router {
@@ -41,19 +42,15 @@ class Router {
             return new Response(404);
         }
 
-        // if (is_callable($callback)) {
-        //     call_user_func_array($callback, Uri::getParams());
-        //     return new Route($method, $path);
-        // }
+        if (is_string($callback)) {
+            $callback = explode('@', $callback);
+        }
 
-        // if (is_string($callback)) {
-        //     $callback = explode('@', $callback);
-        // }
-
-        // $class = $callback[0];
-        // $func = $callback[1];
-
-        // (new $class)->$func(...Uri::getParams());
+        if (is_array($callback)) {
+            call_user_func_array($callback, Uri::getParams());
+        } else {
+            call_user_func_array($callback, Uri::getParams());
+        }
 
         return new Route($method, $path);
     }

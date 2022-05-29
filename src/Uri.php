@@ -79,6 +79,28 @@ class Uri {
     }
 
     /**
+     * Get all url
+     * 
+     * @return string
+     */
+    public static function getUrl(): string
+    {
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+            $protocol = 'https://';
+        } else {
+            $protocol = 'http://';
+        }
+
+        if (!isset($_SERVER['HTTP_HOST'])) {
+            $host = "localhost/";
+        } else {
+            $host = $_SERVER['HTTP_HOST'];
+        }
+        
+        return $protocol . $host . self::getPath();
+    }
+
+    /**
      * Match the path with the route
      * 
      * @param string $method
@@ -95,7 +117,7 @@ class Uri {
             return true;
         }
 
-        if (!preg_match_all("#{([\w]+)}#", static::getPath(), $matches)) {
+        if (!preg_match_all("#{([\w]+)}#", $route, $matches)) {
             return false;
         }
 
