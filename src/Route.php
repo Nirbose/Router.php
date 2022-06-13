@@ -4,33 +4,54 @@ namespace Nirbose\Router;
 
 use GuzzleHttp\Psr7\Response;
 
-class Route extends Router {
+class Route {
 
-    private array $route;
+    /**
+     * @var string
+     */
+    private string $method;
 
-    public function __construct(string $method, string $path)
+    /**
+     * @var string
+     */
+    private string $path;
+
+    /**
+     * @var callable|string|array
+     */
+    private $action;
+
+    /**
+     * @var string|null
+     */
+    private $name = null;
+
+    public function __construct(string $method, string $path, $action)
     {
-        $this->route = [
-            'method' => $method,
-            'path' => $path
-        ];
-    }
+        $this->method = $method;
+        $this->path = $path;
+        $this->action = $action;
 
-    public function setHeaders(array $headers)
-    {
-        $this->route['headers'] = $headers;
+        RouteCollector::add($this);
     }
 
     public function name(string $name)
     {
-        $this->route['name'] = $name;
+        $this->name = $name;
+        return $this;
     }
 
-    public function getRoute(): Response
+    public function toArray()
     {
-        $headers = $this->route['headers'] ?? [];
+        $route = [
+            'method' => $this->method,
+            'path' => $this->path,
+            'action' => $this->action,
+        ];
 
-        return new Response(200, $headers);
+        if ($this->name !== null) $route['name'] = $this->name;
+
+        return $route;
     }
 
 }

@@ -7,52 +7,124 @@ use GuzzleHttp\Psr7\Response;
 
 class Router {
 
-    protected static $routes = [];
-    
     /**
-     * Route of method GET
+     * Get route
      * 
      * @param string $path
-     * @param array|callable|string $callback
-     * @return Route|Response
+     * @param string|callable|array $action
+     * @return Route
      */
-    public static function get(string $path, array|callable|string $callback): Route|Response
+    public static function get(string $path, $action): Route
     {
-        return static::addRoute('GET', $path, $callback);
+        return new Route('GET', $path, $action);
     }
 
     /**
-     * Add route to routes array
-     *
-     * @param string $method
-     * @param string $route
-     * @param array|callable|string $callback
-     * @return Route|Response
+     * Post route
+     * 
+     * @param string $path
+     * @param string|callable|array $action
+     * @return Route
      */
-    public static function addRoute(string $method, string $route, array|callable|string $callback): Route|Response
+    public static function post(string $path, $action): Route
     {
-        static::$routes[$method][$route] = $callback;
-
-        return static::match($method, $route, $callback);
+        return new Route('POST', $path, $action);
     }
 
-    public static function match(string $method, string $path, array|callable|string $callback)
+    /**
+     * Put route
+     * 
+     * @param string $path
+     * @param string|callable|array $action
+     * @return Route
+     */
+    public static function put(string $path, $action): Route
     {
-        if (!Uri::is($method, $path)) {
-            return new Response(404);
-        }
+        return new Route('PUT', $path, $action);
+    }
 
-        if (is_string($callback)) {
-            $callback = explode('@', $callback);
-        }
+    /**
+     * Delete route
+     * 
+     * @param string $path
+     * @param string|callable|array $action
+     * @return Route
+     */
+    public static function delete(string $path, $action): Route
+    {
+        return new Route('DELETE', $path, $action);
+    }
 
-        if (is_array($callback)) {
-            call_user_func_array($callback, Uri::getParams());
-        } else {
-            call_user_func_array($callback, Uri::getParams());
-        }
+    /**
+     * Patch route
+     * 
+     * @param string $path
+     * @param string|callable|array $action
+     * @return Route
+     */
+    public static function patch(string $path, $action): Route
+    {
+        return new Route('PATCH', $path, $action);
+    }
 
-        return new Route($method, $path);
+    /**
+     * Options route
+     * 
+     * @param string $path
+     * @param string|callable|array $action
+     * @return Route
+     */
+    public static function options(string $path, $action): Route
+    {
+        return new Route('OPTIONS', $path, $action);
+    }
+
+    /**
+     * Head route
+     * 
+     * @param string $path
+     * @param string|callable|array $action
+     * @return Route
+     */
+    public static function head(string $path, $action): Route
+    {
+        return new Route('HEAD', $path, $action);
+    }
+
+    /**
+     * Any route
+     * 
+     * @param string $path
+     * @param string|callable|array $action
+     * @return Route
+     */
+    public static function any(string $path, $action): Route
+    {
+        return new Route('*', $path, $action);
+    }
+
+    /**
+     * Route
+     * 
+     * @param string $method
+     * @param string $path
+     * @param string|callable|array $action
+     * @return Route
+     */
+    public static function route(string $method, string $path, $action): Route
+    {
+        return new Route($method, $path, $action);
+    }
+
+    /**
+     * Add prefix to all routes
+     * 
+     * @param string $prefix
+     * @return 
+     */
+    public static function prefix(string $prefix)
+    {
+        return new GroupRoutes($prefix);
     }
 
 }

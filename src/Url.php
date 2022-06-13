@@ -2,7 +2,7 @@
 
 namespace Nirbose\Router;
 
-class Uri {
+class Url {
 
     private static string $method = 'GET';
 
@@ -14,6 +14,13 @@ class Uri {
      * @var array
      */
     private static array $params = [];
+
+    /**
+     * Headers of route
+     * 
+     * @var array
+     */
+    private static array $headers = [];
 
     /**
      * set method
@@ -46,6 +53,17 @@ class Uri {
     public static function setParams(array $params)
     {
         self::$params = $params;
+    }
+
+    /**
+     * set headers
+     *
+     * @param array $headers
+     * @return void
+     */
+    public static function setHeaders(array $headers)
+    {
+        self::$headers = $headers;
     }
 
     /**
@@ -101,6 +119,16 @@ class Uri {
     }
 
     /**
+     * get headers
+     *
+     * @return array
+     */
+    public static function getHeaders(): array
+    {
+        return self::$headers;
+    }
+
+    /**
      * Match the path with the route
      * 
      * @param string $method
@@ -122,6 +150,17 @@ class Uri {
         }
 
         return true;
+    }
+
+    /**
+     * trim uri to match route
+     * 
+     * @param string $route
+     * @return string
+     */
+    public static function trim(string $route): string
+    {
+        return trim($route, '/');
     }
 
 }
