@@ -117,14 +117,26 @@ class Router {
     }
 
     /**
-     * Add prefix to all routes
+     * Grouping routes
      * 
      * @param string $prefix
-     * @return 
+     * @param Route[] $routes
+     * @return Route[]
      */
-    public static function prefix(string $prefix)
+    public static function group(string $path, array $routes): array
     {
-        return new GroupRoutes($prefix);
+        $allRoutes = [];
+
+        /** @var Route $route */
+        foreach ($routes as $route) {
+            $route->setPath(
+                '/' . Url::trim($path) . '/' . Url::trim($route->getPath())
+            );
+
+            array_push($allRoutes, $route);
+        }
+
+        return $allRoutes;
     }
 
 }

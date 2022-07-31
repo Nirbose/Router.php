@@ -29,7 +29,7 @@ class Route {
     public function __construct(string $method, string $path, $action)
     {
         $this->method = $method;
-        $this->path = $path;
+        $this->setPath($path);
         $this->action = $action;
 
         RouteCollector::add($this);
@@ -39,6 +39,21 @@ class Route {
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function setPath(string $path)
+    {
+        $this->path = $path;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
     }
 
     public function toArray()
