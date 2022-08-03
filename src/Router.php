@@ -145,6 +145,7 @@ class Router {
             $route->setPath(
                 '/' . Url::trim($path) . '/' . Url::trim($route->getPath())
             );
+            Router::route($route->getMethod(), $route->getPath(), $route->getAction());
 
             array_push($allRoutes, $route);
         }

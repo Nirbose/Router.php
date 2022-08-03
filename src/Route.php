@@ -56,6 +56,11 @@ class Route {
         return $this->path;
     }
 
+    public function getAction()
+    {
+        return $this->action;
+    }
+
     public function toArray()
     {
         $route = [
