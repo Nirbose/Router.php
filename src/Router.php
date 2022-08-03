@@ -2,9 +2,6 @@
 
 namespace Nirbose\Router;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-
 class Router {
 
     /**

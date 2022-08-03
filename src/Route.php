@@ -59,12 +59,11 @@ class Route {
     public function toArray()
     {
         $route = [
-            'method' => $this->method,
-            'path' => $this->path,
-            'action' => $this->action,
+            'method'    => $this->method,
+            'path'      => $this->path,
+            'action'    => $this->action,
+            'name'      => is_null($this->name) ? null : $this->name,
         ];
-
-        if ($this->name !== null) $route['name'] = $this->name;
 
         return $route;
     }
