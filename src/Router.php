@@ -13,7 +13,7 @@ class Router {
      */
     public static function get(string $path, $action): Route
     {
-        return new Route('GET', $path, $action);
+        return static::route('GET', $path, $action);
     }
 
     /**
@@ -25,7 +25,7 @@ class Router {
      */
     public static function post(string $path, $action): Route
     {
-        return new Route('POST', $path, $action);
+        return static::route('POST', $path, $action);
     }
 
     /**
@@ -37,7 +37,7 @@ class Router {
      */
     public static function put(string $path, $action): Route
     {
-        return new Route('PUT', $path, $action);
+        return static::route('PUT', $path, $action);
     }
 
     /**
@@ -49,7 +49,7 @@ class Router {
      */
     public static function delete(string $path, $action): Route
     {
-        return new Route('DELETE', $path, $action);
+        return static::route('DELETE', $path, $action);
     }
 
     /**
@@ -61,7 +61,7 @@ class Router {
      */
     public static function patch(string $path, $action): Route
     {
-        return new Route('PATCH', $path, $action);
+        return static::route('PATCH', $path, $action);
     }
 
     /**
@@ -73,7 +73,7 @@ class Router {
      */
     public static function options(string $path, $action): Route
     {
-        return new Route('OPTIONS', $path, $action);
+        return static::route('OPTIONS', $path, $action);
     }
 
     /**
@@ -85,7 +85,7 @@ class Router {
      */
     public static function head(string $path, $action): Route
     {
-        return new Route('HEAD', $path, $action);
+        return static::route('HEAD', $path, $action);
     }
 
     /**
@@ -97,19 +97,35 @@ class Router {
      */
     public static function any(string $path, $action): Route
     {
-        return new Route('*', $path, $action);
+        return static::route(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $path, $action);
     }
 
     /**
      * Route
      * 
-     * @param string $method
+     * @param string|array $method
      * @param string $path
      * @param string|callable|array $action
      * @return Route
      */
-    public static function route(string $method, string $path, $action): Route
+    public static function route(string|array $method, string $path, $action): Route
     {
+        if (is_array($method)) {
+            foreach ($method as $m) {
+                $match = RouteMatche::matches($m, $path);
+            }
+        } else {
+            $match = RouteMatche::matches($method, $path);
+        }
+
+        if (is_array($match)) {
+            call_user_func_array($action, $match[1]);
+        }
+
+        if ($match) {
+            $action();
+        }
+
         return new Route($method, $path, $action);
     }
 
