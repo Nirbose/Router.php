@@ -21,6 +21,22 @@ class RouteCollector
     }
 
     /**
+     * Update route
+     *
+     * @param Route $old
+     * @param Route $new
+     * @return void
+     */
+     public static function update(Route $old, Route $new)
+     {
+        foreach (self::$routes as $key => $route) {
+            if ($route['path'] == $old->getPath() && $route['method'] == $old->getMethod()) {
+                self::$routes[$key] = $new->toArray();
+            }
+        }
+     }
+
+    /**
      * get routes
      *
      * @return array

@@ -153,4 +153,17 @@ class Router {
         return $allRoutes;
     }
 
+    /**
+     * @param Route[] $routes
+     * @param callable $middleware
+     */
+    public static function middleware(array $routes, callable $middleware)
+    {
+        foreach ($routes as $route) {
+            $newRoute = $route;
+            $newRoute->setMiddleware($middleware);
+            RouteCollector::update($route, $newRoute);
+        }
+    }
+
 }

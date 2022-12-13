@@ -26,6 +26,11 @@ class Route {
      */
     private $name = null;
 
+    /**
+     * @var callable|null
+     */
+     private $middleware = null;
+
     public function __construct(string $method, string $path, $action)
     {
         $this->method = $method;
@@ -46,6 +51,11 @@ class Route {
         $this->path = $path;
     }
 
+    public function setMiddleware(callable $middleware)
+    {
+        $this->middleware = $middleware;
+    }
+
     public function getMethod(): string
     {
         return $this->method;
@@ -61,13 +71,19 @@ class Route {
         return $this->action;
     }
 
+    public function getMiddleware()
+    {
+        return $this->middleware;
+    }
+
     public function toArray()
     {
         $route = [
-            'method'    => $this->method,
-            'path'      => $this->path,
-            'action'    => $this->action,
-            'name'      => is_null($this->name) ? null : $this->name,
+            'method'        => $this->method,
+            'path'          => $this->path,
+            'action'        => $this->action,
+            'name'          => $this->name,
+            'middleware'    => $this->middleware,
         ];
 
         return $route;
