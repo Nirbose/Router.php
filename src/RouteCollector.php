@@ -15,9 +15,9 @@ class RouteCollector
      * @param Route $route
      * @return void
      */
-    public static function add(Route $route)
+    public static function add(Route $route): void
     {
-        array_push(self::$routes, $route->toArray());
+        self::$routes[] = $route->toArray();
     }
 
     /**
@@ -27,7 +27,7 @@ class RouteCollector
      * @param Route $new
      * @return void
      */
-     public static function update(Route $old, Route $new)
+     public static function update(Route $old, Route $new): void
      {
         foreach (self::$routes as $key => $route) {
             if ($route['path'] == $old->getPath() && $route['method'] == $old->getMethod()) {

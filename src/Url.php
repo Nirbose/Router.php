@@ -28,7 +28,7 @@ class Url {
      * @param string $method
      * @return void
      */
-    public static function setMethod(string $method)
+    public static function setMethod(string $method): void
     {
         self::$method = strtoupper($method);
     }
@@ -39,7 +39,7 @@ class Url {
      * @param string $path
      * @return void
      */
-    public static function setPath(string $path)
+    public static function setPath(string $path): void
     {
         self::$path = $path;
     }
@@ -50,7 +50,7 @@ class Url {
      * @param array $params
      * @return void
      */
-    public static function setParams(array $params)
+    public static function setParams(array $params): void
     {
         self::$params = $params;
     }
@@ -61,7 +61,7 @@ class Url {
      * @param array $headers
      * @return void
      */
-    public static function setHeaders(array $headers)
+    public static function setHeaders(array $headers): void
     {
         self::$headers = $headers;
     }
@@ -83,7 +83,7 @@ class Url {
      */
     public static function getPath(): string
     {
-        return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : self::$path;
+        return $_SERVER['REQUEST_URI'] ?? self::$path;
     }
 
     /**

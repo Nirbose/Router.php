@@ -24,7 +24,7 @@ class Route {
     /**
      * @var string|null
      */
-    private $name = null;
+    private ?string $name = null;
 
     /**
      * @var callable|null
@@ -40,18 +40,18 @@ class Route {
         RouteCollector::add($this);
     }
 
-    public function name(string $name)
+    public function name(string $name): static
     {
         $this->name = $name;
         return $this;
     }
 
-    public function setPath(string $path)
+    public function setPath(string $path): void
     {
         $this->path = $path;
     }
 
-    public function setMiddleware(callable $middleware)
+    public function setMiddleware(callable $middleware): void
     {
         $this->middleware = $middleware;
     }
@@ -66,27 +66,25 @@ class Route {
         return $this->path;
     }
 
-    public function getAction()
+    public function getAction(): callable|array|string
     {
         return $this->action;
     }
 
-    public function getMiddleware()
+    public function getMiddleware(): ?callable
     {
         return $this->middleware;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
-        $route = [
+        return [
             'method'        => $this->method,
             'path'          => $this->path,
             'action'        => $this->action,
             'name'          => $this->name,
             'middleware'    => $this->middleware,
         ];
-
-        return $route;
     }
 
 }
